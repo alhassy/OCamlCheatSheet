@@ -45,6 +45,15 @@ or not
 
 
 
+* Strings
+
++ Double quotes for strings, single quote for characters,
+  and a single quote may be used as part of an identifier.
+  - String catenation with ~(^).~
+  - Not arrays, or lists, of characters as in C or Haskell.
+  - Expected ~Print.printf string args~.
+  - Also ~print_string~ and ~read_line ()~.
+
 * Lists
 
 + Syntax: ~[x₀; ...; xₙ]~
