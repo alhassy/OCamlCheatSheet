@@ -45,6 +45,26 @@ or not
 
 
 
+* Lists
+
++ Syntax: ~[x₀; ...; xₙ]~
+
+  - Tuples are optionally enclosed in parens;
+    hence ~[x₀, ..., xₙ]~ is a singleton list
+    consisting of only one tuple!
+
++ Expected functionals:
+    ~List.nth~ for list lookup,
+    ~List.map~, ~List.filter~, etc.
+
++ Cons operation is denoted ~::~.
+
++ Arrays have syntax ~[|x₀; ...; xₙ|]~
+   with 0-indexing lookup ~arr.(n)~.
+
+
+
+
 * newpage :ignore:
   \newpage
 * COMMENT footer
