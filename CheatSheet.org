@@ -27,7 +27,7 @@ or not
 
      Note the keywords for mutual recursion: ~let rec ... and ...~.
 
-  - For a source file: ~ocamlc -i path/to/file.ml~. This prints all names and type signatures as well.
+  - To load a source file enter ~#use "myfile.ml;;"~.
 
 + Only multi-line, nestable, comments: ~(* ... *)~.
 
@@ -38,12 +38,6 @@ or not
 + Anonymous functions use the syntax: ~fun x₀ … xₙ -> ...~
   - ~function~ in-place of ~fun~ also works.
   - Infix functions can be used in prefix by enclosing them in parens; e.g., ~(+) 1 2.~
-
-
-
-
-
-
 
 * Strings
 
@@ -71,6 +65,44 @@ or not
 + Arrays have syntax ~[|x₀; ...; xₙ|]~
    with 0-indexing lookup ~arr.(n)~.
 
+
+
+* Type Construction
+We can make an alias: ~type myInt = int~
+
+However we can also make a new ADT and pattern match on it.
+
+#+BEGIN_EXAMPLE
+type 'a roseTree = Leaf of 'a | MkRoseTree of 'a roseTree list
+
+let rec treeFilter p = function
+  | MkRoseTree ts   -> MkRoseTree (List.map (treeFilter p) ts)
+  | Leaf a when p a -> Leaf a
+  | _               -> MkRoseTree []
+#+END_EXAMPLE
+
+  - As in Haskell, constructors must start with a capital letter
+   *however* type names must begin with a lowercase letter.
+  - We may omit the ~of ...~ to obtain nullary constructors, as expected.
+
+  - Notice the optional guard ~when~ and the wildcard pattern ~_~.
+
+Example usage:
+#+BEGIN_EXAMPLE
+let test = MkRoseTree [ Leaf 1 ; MkRoseTree [ Leaf 2; Leaf 3] ; MkRoseTree [Leaf 4] ]
+
+let rec even = function
+ | 0 -> true
+ | 1 -> false
+ | n -> even (n-2)
+
+(*
+# treeFilter even test;;
+- : int roseTree =
+MkRoseTree
+ [MkRoseTree []; MkRoseTree [Leaf 2; MkRoseTree []]; MkRoseTree [Leaf 4]]
+*)
+#+END_EXAMPLE
 
 
 
