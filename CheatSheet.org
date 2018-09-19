@@ -1,0 +1,58 @@
+#+TITLE: OCaml
+#+SUBTITLE: Getting Started Reference Sheet
+# DATE: << Spring 2018 >>
+# When we don't provide a date, one is provided for us.
+#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]]
+#+EMAIL: alhassy@gmail.com
+#+DESCRIPTION: This document is written by Musa Al-hassy for his learning in the spring of 2018.
+#+STARTUP: hideblocks
+#+STARTUP: overview
+#+TODO: BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
+#+INCLUDE: CheatSheet/CheatSheetSetup.org
+
+* Administrivia
+
++ Command line interpreter, REPL, begun with ~ocaml~ and exited with ~exit 0;;~
+  - All expressions in REPL must be terminated with ~;;~, not so in a script.
+     #+BEGIN_EXAMPLE
+# let rec x = 4 and woah (a, b) c = print_endline a ; print_endline b; x + c ;;
+val x : int = 4
+val woah : string * string -> int -> int = <fun>
+
+# woah ("currying", "or not") 12 ;
+currying
+or not
+- : int = 16
+#+END_EXAMPLE
+
+     Note the keywords for mutual recursion: ~let rec ... and ...~.
+
+  - For a source file: ~ocamlc -i path/to/file.ml~. This prints all names and type signatures as well.
+
++ Only multi-line, nestable, comments: ~(* ... *)~.
+
++ All declarations are preceded by ~let~ or ~let rec~ for recursive ones.
+
++ Sequencing is via ~;~ and the result is the value of the final expression.
+
++ Anonymous functions use the syntax: ~fun x₀ … xₙ -> ...~
+  - ~function~ in-place of ~fun~ also works.
+  - Infix functions can be used in prefix by enclosing them in parens; e.g., ~(+) 1 2.~
+
+
+
+
+
+
+
+* newpage :ignore:
+  \newpage
+* COMMENT footer
+
+(find-file "CheatSheet.el")
+
+# Local Variables:
+# eval: (org-babel-tangle)
+# eval: (load-file "CheatSheet.el")
+# compile-command: (my-org-latex-export-to-pdf)
+# End:
