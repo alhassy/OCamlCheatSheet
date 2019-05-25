@@ -1,16 +1,303 @@
-#+TITLE: OCaml
-#+SUBTITLE: Getting Started Reference Sheet
+#+TITLE: OCaml Cheat Sheet
+# SUBTITLE: Getting Started Reference Sheet
 # DATE: << Spring 2018 >>
 # When we don't provide a date, one is provided for us.
-#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]]
+#+MACRO: URL https://github.com/alhassy/OCamlCheatSheet
+#+MACRO: ShowURL @@latex:{\tiny\hspace{6em}\url{ {{{URL}}} } }@@
+#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]] {{{ShowURL}}}
 #+EMAIL: alhassy@gmail.com
 #+DESCRIPTION: This document is written by Musa Al-hassy for his learning in the spring of 2018.
 #+STARTUP: hideblocks
 #+STARTUP: overview
-#+TODO: BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
+#+TODO: TODO | spacing
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
 
-* Administrivia
+The OCaml toplevel, version 4.07.1
+
+This' a strict language;
+it is strongly typed where types are inferred.
+
+#+BEGIN_SRC emacs-lisp
+(use-package tuareg) ;; Emacs OCaml mode
+
+(async-shell-command "brew install ocaml")
+#+END_SRC
+
+Only when interacting with the top-level interpreter,
+commands must be terminated by ~;;~.
+OCaml uses ~;~ as an expression /separator/ ---not a terminator!
+
+* Functions
+
+A function is declared with the ~let~ keyword
+---variables are functions of zero arguments.
+
+#+BEGIN_SRC ocaml
+(* A curried function *)
+let f x y = x + y
+
+(* Function application *)
+let result = f 10 (2 * 6)
+
+(* Partial application *)
+let g x = f x 2
+
+(* We can re-bind variables *)
+let x = 123
+let x = string_of_int x
+#+END_SRC
+
+#+RESULTS:
+: 123
+
+Recursive functions are marked with the ~rec~ keyword.
+#+BEGIN_SRC ocaml
+let rec fact n = if n = 0 then 1 else n * fact (n - 1)
+
+let result = fact 10
+#+END_SRC
+
+#+RESULTS:
+: 3628800
+
+#+BEGIN_SRC ocaml :session
+(* Unit type; usage: my_io () *)
+let my_io () = print_endline "Hello World!" ;;
+#+END_SRC
+
+OCaml is a functional language: /Procedures/ are functions
+returning the unit type.
+
+#+RESULTS:
+: <fun>
+
+A /function/ is a sequence of expressions; its /return value/
+is the value of the final expression ---all other expressions
+are of unit type.
+
+#+BEGIN_SRC ocaml :session
+let const x y
+  = my_io();
+    y;
+    x
+
+let res = const 1972 12
+#+END_SRC
+
+#+RESULTS:
+: 1972
+
+#+BEGIN_SRC ocaml
+(* Local variables *)
+;;
+let x = 10 in
+let y = x * 2 in
+x + y
+;;
+let f x = x + g x and g x = x in f 2
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+#+BEGIN_SRC ocaml
+(* Anonymouse functions *)
+let sqr = fun x -> x * x
+
+(* Only select symbols can be used as infix operators *)
+let (//) x y = if x then y else false
+
+(* (//) x y  ≈  x // y *)
+let it = true // true
+#+END_SRC
+
+* Lists
+
+#+BEGIN_SRC ocaml
+(* Lists:  type 'a list ≈ [] | (::) of 'a * 'a list  *)
+let xs = [1; 2; 3]
+
+(* Tuples: Char, String, Bool  *)
+let ys = 'a', "two", true
+let that = fst ("that", false)
+
+(* A singelton list of one tuple *)
+let zs = [ 1, "two", true ]
+
+(* Arrays, note the dot!  *)
+let xs_arr = [|1; 2; 3|]
+let xs_mid = xs_arr . (1)
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+Then,
+| List.nth list index   |
+| List.map func list    |
+| List.filter func list |
+| List.hd               |
+| List.rev              |
+| List.length           |
+| String.length         |
+
+* Sequencing
+
+We may use begin/end or parentheses to group
+expressions together.
+
+#+BEGIN_SRC ocaml
+begin
+  print_string "nice";
+  "bye";
+  true;
+  10
+end
+
+;;
+(  print_string "a"
+ ; () (* This is the unit value *)
+ ; 9
+)
+;;
+
+let x = begin 1 * 2 end + (3 - 2)
+#+END_SRC
+
+#+RESULTS:
+: 3
+
+* Booleans
+
+#+BEGIN_SRC ocaml
+(* Inequality is expressed with <> *)
+true = false , true || false, true && false, true >= false
+, 12 < 2, "abc" <= "abd", 1 <> 2
+, if true then 1 else 2
+#+END_SRC
+
+#+RESULTS:
+: (false, true, false, true, false, true, true, 1)
+
+
+
+
+
+
+* Strings
+
+
+#+BEGIN_SRC ocaml
+(* String catenation *)
+let hw = "Hello" ^ " World"
+
+;; Printf.printf "%d %s" 1972 "taxi"
+;; let input = read_line ()
+#+END_SRC
+
+#+RESULTS:
+: Hello World
+
+* References
+
+#+BEGIN_SRC ocaml
+(* Make a reference *)
+let x = ref 1;;
+
+(* Update the reference *)
+x := 2;;
+
+(* Use the reference *)
+let y = 1 + !x
+#+END_SRC
+
+#+RESULTS:
+: 3
+
+* Loops
+
+At each iteration, cons the counter ~i~ to
+the value of the list /so far/:
+#+BEGIN_SRC ocaml
+(* Using “i = 1 to 10” yields the reverse  *)
+let xl = ref [] in
+for i = 10 downto 1 do
+xl := i :: !xl;
+done;
+!xl
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+
+#+BEGIN_SRC ocaml
+let n = 100 and i = ref 0 and x = ref 0 in
+while n <> !i do
+  x := !x + !i; i := !i + 1;
+done;
+!x , 2 * !x = n * (n - 1)
+#+END_SRC
+
+#+RESULTS:
+: (4950, true)
+
+
+
+
+
+* User Defined Data Types
+
+#+BEGIN_SRC ocaml
+(* Type alias *)
+type myints = int
+
+(* Constructors must start with a capital letter, like in Haskell *)
+type 'a term = Nothing | Var of 'a | Add of 'a term * 'a term
+let example = Add (Var 666, Nothing)
+
+(* Guarded pattern matching *)
+let rec sum acc = function | Nothing -> 0 + (match acc with true -> 1 | false -> 0)
+		       | Var x when x <= 0 -> 0
+		       | (Var 666) as p -> failwith "Evil!"
+		       | Add(l, r) -> sum acc l + sum acc r
+		       | _ -> 2 (* Default case *)
+
+let res = sum true example
+#+END_SRC
+
+#+RESULTS:
+: Characters 365-379:
+:		       | (Var 666) as p -> failwith "Evil!"
+:              ^^^^^^^^^^^^^^
+: Warning 26: unused variable p.
+: Exception: Failure "Evil!".
+
+
+Note that we can give a pattern a name; above we mentioned ~p~,
+but did not use it.
+
++ Repeated & non-exhaustive patterns trigger a warning; e.g., remove the default case above.
+
++ You can pattern match on arrays too; e.g.,
+  ~[| x ; y ; z|] -> y~.
+
+#+RESULTS:
+: Characters 319-333:
+:		       | (Var 666) as p -> failwith "Evil!"
+:              ^^^^^^^^^^^^^^
+: Warning 26: unused variable p.
+: Exception: Failure "Evil!".
+
+
+* Reads
+
++ [[https://learnxinyminutes.com/docs/ocaml/][Learn x in y minutes, where x = OCaml]]
++ [[https://try.ocamlpro.com/][Try OCaml, online]]
++ [[https://realworldocaml.org/][Real World OCaml]]
++ [[http://ocaml.github.io/ocamlunix/?ref=hackr.io][Unix system programming in OCaml]]
+
+
+* COMMENT Administrivia
 
 + Command line interpreter, REPL, begun with ~ocaml~ and exited with ~exit 0;;~
   - All expressions in REPL must be terminated with ~;;~, not so in a script.
@@ -39,7 +326,7 @@ or not
   - ~function~ in-place of ~fun~ also works.
   - Infix functions can be used in prefix by enclosing them in parens; e.g., ~(+) 1 2.~
 
-* Strings
+* COMMENT Strings
 
 + Double quotes for strings, single quote for characters,
   and a single quote may be used as part of an identifier.
@@ -48,7 +335,7 @@ or not
   - Expected ~Print.printf string args~.
   - Also ~print_string~ and ~read_line ()~.
 
-* Lists
+* COMMENT Lists
 
 + Syntax: ~[x₀; ...; xₙ]~
 
@@ -66,8 +353,7 @@ or not
    with 0-indexing lookup ~arr.(n)~.
 
 
-
-* Type Construction
+* COMMENT Type Construction
 We can make an alias: ~type myInt = int~
 
 However we can also make a new ADT and pattern match on it.
@@ -104,16 +390,45 @@ MkRoseTree
 *)
 #+END_EXAMPLE
 
-
-
-* newpage :ignore:
+* COMMENT newpage :ignore:
   \newpage
-* COMMENT footer
 
-(find-file "CheatSheet.el")
+
+* COMMENT Making README.md
+
+C-c C-c: Evaluate src block.
+
+#+NAME: make-readme
+#+BEGIN_SRC elisp :results none
+(with-temp-buffer
+    (insert
+    "#+EXPORT_FILE_NAME: README.md
+     #+HTML: <h1> OCamlCheatSheet </h1>
+     #+OPTIONS: toc:nil d:nil
+     # Toc is displayed below at a strategic position.
+
+     Quick reference for the OCaml language.
+
+     *The listing sheet, as PDF, can be found
+     [here]({{{URL}}}/blob/master/CheatSheet.pdf)*,
+     while below is an unruly html rendition.
+
+     This reference sheet is built around the system
+     https://github.com/alhassy/CheatSheet.
+
+     #+TOC: headlines 2
+     #+INCLUDE: CheatSheet.org
+    ")
+    (org-mode)
+    (org-md-export-to-markdown)
+)
+#+END_SRC
+
+* COMMENT footer
 
 # Local Variables:
 # eval: (org-babel-tangle)
+# eval: (progn (org-babel-goto-named-src-block "make-readme") (org-babel-execute-src-block) (outline-hide-sublevels 1))
 # eval: (load-file "CheatSheet.el")
 # compile-command: (my-org-latex-export-to-pdf)
 # End:
