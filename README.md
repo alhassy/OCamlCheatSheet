@@ -12,15 +12,7 @@ This reference sheet is built around the system
 
 # Table of Contents
 
-1.  [Functions](#org2eabb59)
-2.  [Lists](#orge4e635a)
-3.  [Sequencing](#org1e50934)
-4.  [Booleans](#org857f4fd)
-5.  [Strings](#orgbb5088c)
-6.  [References](#orgfbcc78f)
-7.  [Loops](#org9913d72)
-8.  [User Defined Data Types](#org055e817)
-9.  [Reads](#org215f1de)
+1.  [Emacs Setup](#org4246da3)
 
 
 
@@ -32,262 +24,53 @@ This reference sheet is built around the system
 
 
 
+The OCaml toplevel, version 4.07.1
 
-<a id="org2eabb59"></a>
+This' a strict language;
+it is strongly typed where types are inferred.
 
-# Functions
+Only when interacting with the top-level interpreter,
+commands must be terminated by `;;`.
+OCaml uses `;` as an expression *separator* &#x2014;not a terminator!
 
-A function is declared with the `let` keyword
-&#x2014;variables are functions of zero arguments.
 
-    (* A curried function *)
-    let f x y = x + y
+<a id="org4246da3"></a>
 
-    (* Function application *)
-    let result = f 10 (2 * 6)
+# Emacs Setup
 
-    (* Partial application *)
-    let g x = f x 2
+    (async-shell-command "brew install ocaml")
+    (use-package tuareg) ;; Emacs’ OCaml mode
 
-    (* We can re-bind variables *)
-    let x = 123
-    let x = string_of_int x
+    ;; The OCaml package manager: https://opam.ocaml.org/
+    (async-shell-command "brew install opam") ;; version 2.0.4
 
-Recursive functions are marked with the `rec` keyword.
+    ;; Feature-rich full replacement to OCaml's standard library
+    (async-shell-command "time opam install base stdio")
+    ;; This may appear to ‘hang’, but that's because it took me 13 minutes.
 
-    let rec fact n = if n = 0 then 1 else n * fact (n - 1)
+Ensuring libraries are loaded in toplevel ocaml sessions; the following is my
+`~/.ocamlinit`.
 
-    let result = fact 10
+    (* Added by OPAM. *)
+      try Topdirs.dir_directory (Sys.getenv "OCAML_TOPLEVEL_PATH")
+      with Not_found -> ();;
 
-    (* Unit type; usage: my_io () *)
-    let my_io () = print_endline "Hello World!" ;;
+    #use "topfind";;
+    #require "base";;
+    #require "stdio";;
 
-OCaml is a functional language: *Procedures* are functions
-returning the unit type.
+Let's obtain `ocp-indent` &#x2014;OCaml's indentation tool that indents the same even if
+co-workers use a different editor&#x2014; and [merlin](https://github.com/ocaml/merlin/wiki/emacs-from-scratch) which provides interactive feedback
+including context-aware completion and jumping to definitions.
 
-    <fun>
+    (async-shell-command "time opam install ocp-indent merlin") ;; real 1m33.636s
+    (use-package merlin)
+    (add-hook 'tuareg-mode-hook #'merlin-mode)
 
-A *function* is a sequence of expressions; its *return value*
-is the value of the final expression &#x2014;all other expressions
-are of unit type.
+    (with-eval-after-load 'merlin
+      (setq merlin-command 'opam))
 
-    let const x y
-      = my_io();
-	y;
-	x
+Now entering, say, `List.` brings a pop-up compleition menu for the contents of the
+list module.
 
-    let res = const 1972 12
-
-    (* Local variables *)
-    ;;
-    let x = 10 in
-    let y = x * 2 in
-    x + y
-    ;;
-    let f x = x + g x and g x = x in f 2
-
-    (* Anonymouse functions *)
-    let sqr = fun x -> x * x
-
-    (* Only select symbols can be used as infix operators *)
-    let (//) x y = if x then y else false
-
-    (* (//) x y  ≈  x // y *)
-    let it = true // true
-
-
-<a id="orge4e635a"></a>
-
-# Lists
-
-    (* Lists:  type 'a list ≈ [] | (::) of 'a * 'a list  *)
-    let xs = [1; 2; 3]
-
-    (* Tuples: Char, String, Bool  *)
-    let ys = 'a', "two", true
-    let that = fst ("that", false)
-
-    (* A singelton list of one tuple *)
-    let zs = [ 1, "two", true ]
-
-    (* Arrays, note the dot!  *)
-    let xs_arr = [|1; 2; 3|]
-    let xs_mid = xs_arr . (1)
-
-Then,
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-</colgroup>
-<tbody>
-<tr>
-<td class="org-left">List.nth list index</td>
-</tr>
-
-
-<tr>
-<td class="org-left">List.map func list</td>
-</tr>
-
-
-<tr>
-<td class="org-left">List.filter func list</td>
-</tr>
-
-
-<tr>
-<td class="org-left">List.hd</td>
-</tr>
-
-
-<tr>
-<td class="org-left">List.rev</td>
-</tr>
-
-
-<tr>
-<td class="org-left">List.length</td>
-</tr>
-
-
-<tr>
-<td class="org-left">String.length</td>
-</tr>
-</tbody>
-</table>
-
-
-<a id="org1e50934"></a>
-
-# Sequencing
-
-We may use begin/end or parentheses to group
-expressions together.
-
-    begin
-      print_string "nice";
-      "bye";
-      true;
-      10
-    end
-
-    ;;
-    (  print_string "a"
-     ; () (* This is the unit value *)
-     ; 9
-    )
-    ;;
-
-    let x = begin 1 * 2 end + (3 - 2)
-
-
-<a id="org857f4fd"></a>
-
-# Booleans
-
-    (* Inequality is expressed with <> *)
-    true = false , true || false, true && false, true >= false
-    , 12 < 2, "abc" <= "abd", 1 <> 2
-    , if true then 1 else 2
-
-
-<a id="orgbb5088c"></a>
-
-# Strings
-
-    (* String catenation *)
-    let hw = "Hello" ^ " World"
-
-    ;; Printf.printf "%d %s" 1972 "taxi"
-    ;; let input = read_line ()
-
-
-<a id="orgfbcc78f"></a>
-
-# References
-
-    (* Make a reference *)
-    let x = ref 1;;
-
-    (* Update the reference *)
-    x := 2;;
-
-    (* Use the reference *)
-    let y = 1 + !x
-
-
-<a id="org9913d72"></a>
-
-# Loops
-
-At each iteration, cons the counter `i` to
-the value of the list *so far*:
-
-    (* Using “i = 1 to 10” yields the reverse  *)
-    let xl = ref [] in
-    for i = 10 downto 1 do
-    xl := i :: !xl;
-    done;
-    !xl
-
-    let n = 100 and i = ref 0 and x = ref 0 in
-    while n <> !i do
-      x := !x + !i; i := !i + 1;
-    done;
-    !x , 2 * !x = n * (n - 1)
-
-
-<a id="org055e817"></a>
-
-# User Defined Data Types
-
-    (* Type alias *)
-    type myints = int
-
-    (* Constructors must start with a capital letter, like in Haskell *)
-    type 'a term = Nothing | Var of 'a | Add of 'a term * 'a term
-    let example = Add (Var 666, Nothing)
-
-    (* Guarded pattern matching *)
-    let rec sum acc = function | Nothing -> 0 + (match acc with true -> 1 | false -> 0)
-		       | Var x when x <= 0 -> 0
-		       | (Var 666) as p -> failwith "Evil!"
-		       | Add(l, r) -> sum acc l + sum acc r
-		       | _ -> 2 (* Default case *)
-
-    let res = sum true example
-
-:		       | (Var 666) as p -> failwith "Evil!"
-
-		 ^^^^^^^^^^^^^^
-    Warning 26: unused variable p.
-    Exception: Failure "Evil!".
-
-Note that we can give a pattern a name; above we mentioned `p`,
-but did not use it.
-
--   Repeated & non-exhaustive patterns trigger a warning; e.g., remove the default case above.
-
--   You can pattern match on arrays too; e.g.,
-    `[| x ; y ; z|] -> y`.
-
-    Characters 319-333:
-
-:		       | (Var 666) as p -> failwith "Evil!"
-
-		 ^^^^^^^^^^^^^^
-    Warning 26: unused variable p.
-    Exception: Failure "Evil!".
-
-
-<a id="org215f1de"></a>
-
-# Reads
-
--   [Learn x in y minutes, where x = OCaml](https://learnxinyminutes.com/docs/ocaml/)
--   [Try OCaml, online](https://try.ocamlpro.com/)
--   [Real World OCaml](https://realworldocaml.org/)
--   [Unix system programming in OCaml](http://ocaml.github.io/ocamlunix/?ref=hackr.io)
+In org-src blocks, you need to enter the ocaml mode, via C-c '.
