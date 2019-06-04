@@ -257,7 +257,7 @@ let input = read_line ();;
   let {x = px; y = py} = p;;
   let go {x = qx; y = qy} = qx +. qy;;
 
-  (* More tersely, using “field pruning”: Variables must coincide with field names. *)
+  (* More tersely, using “field punning”: Variables must coincide with field names. *)
   let erroenous ({xx; y} : point2d )= x +. y;;
   let works {x; y} = 0.0;;
 
