@@ -6,36 +6,36 @@
 
 **The listing sheet, as PDF, can be found
 [here](CheatSheet.pdf)**,
-or as a [single column portrait](CheatSheet<sub>Portrait.pdf</sub>),
+or as a [single column portrait](CheatSheet_Portrait.pdf),
 while below is an unruly html rendition.
 
 This reference sheet is built from a
-[CheatSheets with Org-mode](<https://github.com/alhassy/CheatSheet>)
+[CheatSheets with Org-mode](https://github.com/alhassy/CheatSheet)
 system.
 
 
 # Table of Contents
 
-1.  [Emacs Setup](#org6b9c1af):HTML:
-2.  [Arithmetic](#org226a9d3)
-3.  [Functions & Variables](#orgd4ade84)
-4.  [Booleans](#org7d64bdc)
-5.  [Strings](#orga04ba0b)
-6.  [Records](#org32f3877)
-7.  [Variants and Pattern Matching](#org93f0525)
-8.  [Tuples and Lists](#orgf54d5a5)
-9.  [Options](#orgeb77916)
-10. [Imperative Programming &#x2014;Sequencing & `main`](#orgf5f566d)
-11. [Imperative Programming &#x2014;Arrays](#org5137683)
-12. [Imperative Programming &#x2014;Unit Type](#org29b038e)
-13. [Imperative programming &#x2014;Mutable records](#org3a1d938)
-14. [Imperative Programming &#x2014;References](#org404e32c)
-15. [Modules](#org7cc44ae)
-16. [Functors](#org533ab44)
-17. [First-Class Modules](#orgd473c93)
-18. [*Locally* Abstract Types & ‘[un]bundling’](#orgdefc8fd)
-19. [Metaprogramming with MetaOCaml](#org2e5e6c5)
-20. [Reads](#org3b42df5)
+1.  [Emacs Setup](#org94e9f39):HTML:
+2.  [Arithmetic](#org849a066)
+3.  [Functions & Variables](#org1344014)
+4.  [Booleans](#orgd3de3b7)
+5.  [Strings](#org10d734c)
+6.  [Records](#org262bbec)
+7.  [Variants and Pattern Matching](#org6608e6d)
+8.  [Tuples and Lists](#org67af557)
+9.  [Options](#orgbe4f146)
+10. [Imperative Programming &#x2014;Sequencing & `main`](#org8dae4ac)
+11. [Imperative Programming &#x2014;Arrays](#orge48c00e)
+12. [Imperative Programming &#x2014;Unit Type](#orgbbe1203)
+13. [Imperative programming &#x2014;Mutable records](#org186bdec)
+14. [Imperative Programming &#x2014;References](#org7589654)
+15. [Modules](#orgf9e076f)
+16. [Functors](#orgacb6c97)
+17. [First-Class Modules](#org1f3bead)
+18. [*Locally* Abstract Types & ‘[un]bundling’](#org02ce931)
+19. [Metaprogramming with MetaOCaml](#org2064485)
+20. [Reads](#orgdc9edf1)
 
 
 
@@ -67,7 +67,7 @@ OCaml uses `;` as an expression *separator* &#x2014;not a terminator!
 My Emacs setup for OCaml can be found on this [CheatSheet's repo](https://github.com/alhassy/OCamlCheatSheet).
 
 
-<a id="org6b9c1af"></a>
+<a id="org94e9f39"></a>
 
 # Emacs Setup     :HTML:
 
@@ -103,7 +103,7 @@ contents of the list module.
 &#x2014;In org-src blocks, you need to enter the ocaml mode, via `C-c '`.
 
 
-<a id="org226a9d3"></a>
+<a id="org849a066"></a>
 
 # Arithmetic
 
@@ -114,7 +114,7 @@ Operations on floats have a ‘.’ suffix.
     8.0 /. 3.0;; (* 2.6666… *)
 
 
-<a id="orgd4ade84"></a>
+<a id="org1344014"></a>
 
 # Functions & Variables
 
@@ -165,7 +165,7 @@ parametricly polymorphic.
       ~- 2 = ~- 2 mod 3;; (* /Remainder/ after dividing out 3s *)
 
 
-<a id="org7d64bdc"></a>
+<a id="orgd3de3b7"></a>
 
 # Booleans
 
@@ -177,7 +177,7 @@ Inequality is expressed with `<>`.
     , if true then 1 else 2
 
 
-<a id="orga04ba0b"></a>
+<a id="org10d734c"></a>
 
 # Strings
 
@@ -189,7 +189,7 @@ OCaml strings are not arrays, or lists, of characters as in C or Haskell.
     let input = read_line ();;
 
 
-<a id="org32f3877"></a>
+<a id="org262bbec"></a>
 
 # Records
 
@@ -212,7 +212,7 @@ Records: Products with named, rather than positional, components.
     let go q = q.x +. q.y;;
 
 
-<a id="org93f0525"></a>
+<a id="org6608e6d"></a>
 
 # Variants and Pattern Matching
 
@@ -256,7 +256,7 @@ but did not use it.
 The above mechanisms apply to all variants &#x2014;including tuples, lists, and options.
 
 
-<a id="orgf54d5a5"></a>
+<a id="org67af557"></a>
 
 # Tuples and Lists
 
@@ -290,7 +290,7 @@ Tuples: Parentheses are optional, comma is the main operator.
 \columnbreak
 
 
-<a id="orgeb77916"></a>
+<a id="orgbe4f146"></a>
 
 # Options
 
@@ -305,7 +305,7 @@ Option: Expressing whether a value is present or not.
     2 = getInt (Some 2);;
 
 
-<a id="orgf5f566d"></a>
+<a id="org8dae4ac"></a>
 
 # Imperative Programming &#x2014;Sequencing & `main`
 
@@ -339,7 +339,7 @@ is evaluated sequentially at startup, which may contain arbitrary expressions no
 and so in some sense the full codebase is one big `main` function.
 
 
-<a id="org5137683"></a>
+<a id="orge48c00e"></a>
 
 # Imperative Programming &#x2014;Arrays
 
@@ -355,7 +355,7 @@ What is the *type* of update, `<-`? A function that returns the unit type!
 &#x2014;see `myupdate` below.
 
 
-<a id="org29b038e"></a>
+<a id="orgbbe1203"></a>
 
 # Imperative Programming &#x2014;Unit Type
 
@@ -388,7 +388,7 @@ are of unit type.
 </div>
 
 
-<a id="org3a1d938"></a>
+<a id="org186bdec"></a>
 
 # Imperative programming &#x2014;Mutable records
 
@@ -406,7 +406,7 @@ Record fields are immutable by default, but can be declared mutable.
        ; {sum = 0; more = 12} = res ;;
 
 
-<a id="org404e32c"></a>
+<a id="org7589654"></a>
 
 # Imperative Programming &#x2014;References
 
@@ -434,7 +434,7 @@ Notice that `ref` is overloaded: As a type former and as a function forming valu
 \columnbreak
 
 
-<a id="org7cc44ae"></a>
+<a id="orgf9e076f"></a>
 
 # Modules
 
@@ -600,7 +600,7 @@ same in the implementation as in the interface, likewise for record fields and
 function arguments.
 
 
-<a id="org533ab44"></a>
+<a id="orgacb6c97"></a>
 
 # Functors
 
@@ -636,7 +636,7 @@ A functor may be applied to **any** module that satisfies the functor's input in
     One.x = Point.x + 1;;
 
 
-<a id="orgd473c93"></a>
+<a id="org1f3bead"></a>
 
 # First-Class Modules
 
@@ -684,7 +684,7 @@ We can create ordinary functions which consume and create first-class modules.
 \columnbreak
 
 
-<a id="orgdefc8fd"></a>
+<a id="org02ce931"></a>
 
 # *Locally* Abstract Types & ‘[un]bundling’
 
@@ -731,7 +731,7 @@ Here's an example where we approximate C#'s `default` keyword:
 
 
 
-<a id="org2e5e6c5"></a>
+<a id="org2064485"></a>
 
 # Metaprogramming with [MetaOCaml](http://okmij.org/ftp/ML/MetaOCaml.html)
 
@@ -771,7 +771,7 @@ For more, see [A Gentle Introduction to Multi-stage Programming](http://citeseer
 \columnbreak
 
 
-<a id="org3b42df5"></a>
+<a id="orgdc9edf1"></a>
 
 # Reads
 

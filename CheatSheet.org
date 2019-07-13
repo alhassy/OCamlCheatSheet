@@ -942,17 +942,17 @@ C-c C-c: Evaluate src block.
 
      # Quick reference for the OCaml language.
 
-     ,#+begin_center
+     ,#+begin_center org
      [[https://alhassy.github.io/OCamlCheatSheet/][◆ Website ◆]]
      ,#+end_center
 
      ,*The listing sheet, as PDF, can be found
-     [here](CheatSheet.pdf)*,
-     or as a [single column portrait](CheatSheet_Portrait.pdf),
+     [[file:CheatSheet.pdf][here]]*,
+     or as a [[file:CheatSheet_Portrait.pdf][single column portrait]],
      while below is an unruly html rendition.
 
      This reference sheet is built from a
-     [CheatSheets with Org-mode](https://github.com/alhassy/CheatSheet)
+     [[https://github.com/alhassy/CheatSheet][CheatSheets with Org-mode]]
      system.
 
      ,#+TOC: headlines 2
