@@ -1,37 +1,43 @@
 <h1> OCamlCheatSheet </h1>
 
-Quick reference for the OCaml language.
+<div class="org-center">
+[◆ Website ◆](https://alhassy.github.io/OCamlCheatSheet/)
+</div>
 
 **The listing sheet, as PDF, can be found
-[here](<https://github.com/alhassy/OCamlCheatSheet/blob/master/CheatSheet.pdf>)**,
+[here](CheatSheet.pdf)**,
+or as a [single column portrait](CheatSheet<sub>Portrait.pdf</sub>),
 while below is an unruly html rendition.
 
-This reference sheet is built around the system
-<https://github.com/alhassy/CheatSheet>.
+This reference sheet is built from a
+[CheatSheets with Org-mode](<https://github.com/alhassy/CheatSheet>)
+system.
 
 
 # Table of Contents
 
-1.  [Emacs Setup](#orgb522775)
-2.  [Arithmetic](#org1d4642d)
-3.  [Functions & Variables](#org56f4cdc)
-4.  [Booleans](#orgc2ed691)
-5.  [Strings](#org1f07b7f)
-6.  [Records](#orgd24a927)
-7.  [Variants and Pattern Matching](#org7b7b857)
-8.  [Tuples and Lists](#orgbd2b983)
-9.  [Options](#org80aa9a5)
-10. [Imperative Programming &#x2014;Sequencing & `main`](#org319b36f)
-11. [Imperative Programming &#x2014;Arrays](#orgbe8858c)
-12. [Imperative Programming &#x2014;Unit Type](#org3a6cdbd)
-13. [Imperative programming &#x2014;Mutable records](#org3ca9aa5)
-14. [Imperative Programming &#x2014;References](#org377884b)
-15. [Modules](#orgedd6485)
-16. [Functors](#org02d1780)
-17. [First-Class Modules](#org796a204)
-18. [*Locally* Abstract Types & ‘[un]bundling’](#org3f002ba)
-19. [Metaprogramming with MetaOCaml](#org8b769f7)
-20. [Reads](#orgb2790d2)
+1.  [Emacs Setup](#org6b9c1af):HTML:
+2.  [Arithmetic](#org226a9d3)
+3.  [Functions & Variables](#orgd4ade84)
+4.  [Booleans](#org7d64bdc)
+5.  [Strings](#orga04ba0b)
+6.  [Records](#org32f3877)
+7.  [Variants and Pattern Matching](#org93f0525)
+8.  [Tuples and Lists](#orgf54d5a5)
+9.  [Options](#orgeb77916)
+10. [Imperative Programming &#x2014;Sequencing & `main`](#orgf5f566d)
+11. [Imperative Programming &#x2014;Arrays](#org5137683)
+12. [Imperative Programming &#x2014;Unit Type](#org29b038e)
+13. [Imperative programming &#x2014;Mutable records](#org3a1d938)
+14. [Imperative Programming &#x2014;References](#org404e32c)
+15. [Modules](#org7cc44ae)
+16. [Functors](#org533ab44)
+17. [First-Class Modules](#orgd473c93)
+18. [*Locally* Abstract Types & ‘[un]bundling’](#orgdefc8fd)
+19. [Metaprogramming with MetaOCaml](#org2e5e6c5)
+20. [Reads](#org3b42df5)
+
+
 
 
 
@@ -61,9 +67,9 @@ OCaml uses `;` as an expression *separator* &#x2014;not a terminator!
 My Emacs setup for OCaml can be found on this [CheatSheet's repo](https://github.com/alhassy/OCamlCheatSheet).
 
 
-<a id="orgb522775"></a>
+<a id="org6b9c1af"></a>
 
-# Emacs Setup
+# Emacs Setup     :HTML:
 
 First, let's get [Meta]OCaml.
 
@@ -97,7 +103,7 @@ contents of the list module.
 &#x2014;In org-src blocks, you need to enter the ocaml mode, via `C-c '`.
 
 
-<a id="org1d4642d"></a>
+<a id="org226a9d3"></a>
 
 # Arithmetic
 
@@ -108,14 +114,12 @@ Operations on floats have a ‘.’ suffix.
     8.0 /. 3.0;; (* 2.6666… *)
 
 
-<a id="org56f4cdc"></a>
+<a id="orgd4ade84"></a>
 
 # Functions & Variables
 
-A function is declared with the `let` keyword
+  A function is declared with the `let` keyword
 &#x2014;variables are functions of zero arguments.
-
-\room
 Function & varaible names *must* begin with a lowercase letter, and may use \_ or `'`.
 
 -   They cannot begin with capital letters or numbers, or contain dashes!
@@ -138,8 +142,8 @@ Function & varaible names *must* begin with a lowercase letter, and may use \_ o
 Recursive functions are marked with the `rec` keyword.
 
     let rec fact n = if n = 0
-		 then 1
-		 else n * fact (n - 1)
+             then 1
+             else n * fact (n - 1)
 
 </div>
 
@@ -148,12 +152,12 @@ Here's an example of a higher-order function & multiple local functions
 parametricly polymorphic.
 
     let try_add (bop : 'a -> 'a -> 'a) (test : 'a -> bool)
-	    (default : 'a) (x : 'a) (y : 'a)
+            (default : 'a) (x : 'a) (y : 'a)
        = let (/@/) x y = bop x y
-	 (* Only select symbols can be used as infix operators *)
-	 (* (/@/) x y  =  x /@/ y *)
-	 and wrap a = if test a then a else default
-	 in wrap x /@/ wrap y;;
+         (* Only select symbols can be used as infix operators *)
+         (* (/@/) x y  =  x /@/ y *)
+         and wrap a = if test a then a else default
+         in wrap x /@/ wrap y;;
 
       699 = try_add (+) (fun a -> a mod 3 = 0) (666) (~-1) 33;;
       (* The anonymouse function uses ‘=’ as Boolean equality. *)
@@ -161,7 +165,7 @@ parametricly polymorphic.
       ~- 2 = ~- 2 mod 3;; (* /Remainder/ after dividing out 3s *)
 
 
-<a id="orgc2ed691"></a>
+<a id="org7d64bdc"></a>
 
 # Booleans
 
@@ -173,7 +177,7 @@ Inequality is expressed with `<>`.
     , if true then 1 else 2
 
 
-<a id="org1f07b7f"></a>
+<a id="orga04ba0b"></a>
 
 # Strings
 
@@ -185,7 +189,7 @@ OCaml strings are not arrays, or lists, of characters as in C or Haskell.
     let input = read_line ();;
 
 
-<a id="orgd24a927"></a>
+<a id="org32f3877"></a>
 
 # Records
 
@@ -200,7 +204,7 @@ Records: Products with named, rather than positional, components.
     let {x = px; y = py} = p;;
     let go {x = qx; y = qy} = qx +. qy;;
 
-    (* More tersely, using “field pruning”: Variables must coincide with field names. *)
+    (* More tersely, using “field punning”: Variables must coincide with field names. *)
     let erroenous ({xx; y} : point2d )= x +. y;;
     let works {x; y} = 0.0;;
 
@@ -208,7 +212,7 @@ Records: Products with named, rather than positional, components.
     let go q = q.x +. q.y;;
 
 
-<a id="org7b7b857"></a>
+<a id="org93f0525"></a>
 
 # Variants and Pattern Matching
 
@@ -217,7 +221,7 @@ each case is distinuighed by a capitalised tag.
 
     (* Constructors must start with a capital letter, like in Haskell *)
     type 'a fancy_num =   Nothing | Boring of int | Fancy of 'a
-		    | Point of point2d | Pair of 'a fancy_num * 'a fancy_num
+                | Point of point2d | Pair of 'a fancy_num * 'a fancy_num
 
     let example = Pair (Fancy "twenty", Point {x = 1.2; y = 3.14})
 
@@ -252,7 +256,7 @@ but did not use it.
 The above mechanisms apply to all variants &#x2014;including tuples, lists, and options.
 
 
-<a id="orgbd2b983"></a>
+<a id="orgf54d5a5"></a>
 
 # Tuples and Lists
 
@@ -283,10 +287,10 @@ Tuples: Parentheses are optional, comma is the main operator.
     [1; 2; 3] = List.map ["a", "ab", "abc"] ~f:String.length;;
     [1; 2; 3] = List.map  ~f:String.length ["a", "ab", "abc"];;
 
-\newpage
+\columnbreak
 
 
-<a id="org80aa9a5"></a>
+<a id="orgeb77916"></a>
 
 # Options
 
@@ -301,7 +305,7 @@ Option: Expressing whether a value is present or not.
     2 = getInt (Some 2);;
 
 
-<a id="org319b36f"></a>
+<a id="orgf5f566d"></a>
 
 # Imperative Programming &#x2014;Sequencing & `main`
 
@@ -335,7 +339,7 @@ is evaluated sequentially at startup, which may contain arbitrary expressions no
 and so in some sense the full codebase is one big `main` function.
 
 
-<a id="orgbe8858c"></a>
+<a id="org5137683"></a>
 
 # Imperative Programming &#x2014;Arrays
 
@@ -351,7 +355,7 @@ What is the *type* of update, `<-`? A function that returns the unit type!
 &#x2014;see `myupdate` below.
 
 
-<a id="org3a6cdbd"></a>
+<a id="org29b038e"></a>
 
 # Imperative Programming &#x2014;Unit Type
 
@@ -366,7 +370,7 @@ are of unit type.
     let ex : unit = ();;
 
     let myupdate (arr : 'a array) (e : 'a)
-	     (i : int) : unit
+             (i : int) : unit
       = arr.(i) <- e;;
 
     myupdate nums 33 1;;
@@ -376,15 +380,15 @@ are of unit type.
 
     let const x y
       = my_io();
-	y;
-	x;;
+        y;
+        x;;
 
     let res = const 1972 12;;
 
 </div>
 
 
-<a id="org3ca9aa5"></a>
+<a id="org3a1d938"></a>
 
 # Imperative programming &#x2014;Mutable records
 
@@ -395,14 +399,14 @@ Record fields are immutable by default, but can be declared mutable.
     let create () = {sum = 0; more = 0};;
 
     let update rs x =   rs.sum  <- rs.sum + rs.more
-		  ; rs.more <- x;;
+              ; rs.more <- x;;
 
     let  res = create ()
     in   update res 12
        ; {sum = 0; more = 12} = res ;;
 
 
-<a id="org377884b"></a>
+<a id="org404e32c"></a>
 
 # Imperative Programming &#x2014;References
 
@@ -425,10 +429,12 @@ Notice that `ref` is overloaded: As a type former and as a function forming valu
     in   for i = 0 to 10 do sum := !sum + i done
        ; 55 = !sum;;
 
-\newpage
+    true
+
+\columnbreak
 
 
-<a id="orgedd6485"></a>
+<a id="org7cc44ae"></a>
 
 # Modules
 
@@ -442,7 +448,7 @@ which act as boundaries that divide a program into conceptual units.
     *interface, module type, signature* &#x2014;all are aliases.
     -   `val` declarations specify values in a signature: `val ⟪identifier⟫ : ⟪type⟫`.
     -   A type is *abstract* if its name is exposed in the interface but its definition is not: `type t`.
-	-   It is conventional to use `t` for the name of such types.
+        -   It is conventional to use `t` for the name of such types.
     -   Including the type definition in the interface makes the type *concrete*.
 
 -   E.g., module names are derived, with capitalisation, automatically from file names.
@@ -501,7 +507,7 @@ Being ‘generative’ is akin to the `new` keyword in Java:
       end
 
     module BasicImplementaion
-	   : EssentiallyString = struct
+           : EssentiallyString = struct
       type t = string
       let to_string x = x
       let from_string x = x
@@ -594,7 +600,7 @@ same in the implementation as in the interface, likewise for record fields and
 function arguments.
 
 
-<a id="org02d1780"></a>
+<a id="org533ab44"></a>
 
 # Functors
 
@@ -630,7 +636,7 @@ A functor may be applied to **any** module that satisfies the functor's input in
     One.x = Point.x + 1;;
 
 
-<a id="org796a204"></a>
+<a id="orgd473c93"></a>
 
 # First-Class Modules
 
@@ -673,10 +679,12 @@ We can create ordinary functions which consume and create first-class modules.
     (* unpack' : (module OneInt) -> int *)
     let unpack' (module M : OneInt) = M.x;;
 
-\newpage
+    true
+
+\columnbreak
 
 
-<a id="org3f002ba"></a>
+<a id="orgdefc8fd"></a>
 
 # *Locally* Abstract Types & ‘[un]bundling’
 
@@ -723,7 +731,7 @@ Here's an example where we approximate C#'s `default` keyword:
 
 
 
-<a id="org8b769f7"></a>
+<a id="org2e5e6c5"></a>
 
 # Metaprogramming with [MetaOCaml](http://okmij.org/ftp/ML/MetaOCaml.html)
 
@@ -760,10 +768,10 @@ For more, see [A Gentle Introduction to Multi-stage Programming](http://citeseer
 -   The deprecated `!.` is replaced with `Runcode.run`.
 -   A Haskell rendition can be found [here](https://github.com/alhassy/multistage-programming-taha).
 
-\newpage
+\columnbreak
 
 
-<a id="orgb2790d2"></a>
+<a id="org3b42df5"></a>
 
 # Reads
 

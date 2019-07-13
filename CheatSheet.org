@@ -1,33 +1,18 @@
 #+TITLE: OCaml Cheat Sheet
-# SUBTITLE: Getting Started Reference Sheet
-#+MACRO: URL https://github.com/alhassy/OCamlCheatSheet
-#+MACRO: ShowURL @@latex:{\tiny\hspace{6em}\url{ {{{URL}}} } }@@
-#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]] {{{ShowURL}}}
+#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]]
 #+EMAIL: alhassy@gmail.com
-#+TODO: TODO | spacing
-#+OPTIONS: d:nil
-
+#+TODO: TODO | LaTeX spacing
+#+INCLUDE: CheatSheet/CheatSheetSetup.org
+#+PROPERTY: header-args :exports code
 # The OCaml toplevel, version 4.07.1
 
-* LaTeX Setup                                                :ignore:
-# Can be obtained from: https://github.com/alhassy/MyUnicodeSymbols
-#
-#+LATEX_HEADER: \usepackage{/Users/musa/MyUnicodeSymbols/MyUnicodeSymbols}
+# TODO: Spacing in itemize is too much!
 
-# Removing the red box that appears in "minted" when using unicode.
-# Src: https://tex.stackexchange.com/questions/343494/minted-red-box-around-greek-characters
-#
-#+LATEX_HEADER: \makeatletter
-#+LATEX_HEADER: \AtBeginEnvironment{minted}{\dontdofcolorbox}
-#+LATEX_HEADER: \def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
-#+LATEX_HEADER: \makeatother
+* LaTeX Setup                                                        :ignore:
 
-
-#+LATEX_HEADER: \usepackage{newunicodechar}
-#+LATEX_HEADER: \newunicodechar{⟪}{\ensuremath{\llangle}}
-#+LATEX_HEADER: \newunicodechar{⟫}{\ensuremath{\rrangle}}
-
-#+INCLUDE: CheatSheet/CheatSheetSetup.org
+#+LATEX_HEADER: \def\cheatsheeturl{https://github.com/alhassy/OCamlCheatSheet}
+#+LATEX_HEADER: \newunicodechar{⟪}{H} % \ensuremath{\llangle}}
+#+LATEX_HEADER: \newunicodechar{⟫}{H} % \ensuremath{\rrangle}}
 
 * Administrivia :ignore:
 
@@ -35,7 +20,7 @@
 
 OCaml is a strict language;
 it is strongly typed where types are inferred.
-
+#+latex: \newline
 I may write explicit type annotations below for demonstration
 or clarity purposes.
   #+BEGIN_SRC ocaml
@@ -44,13 +29,10 @@ or clarity purposes.
   let f (x : int) (y : string) (r : 'a) : float = 3.14;;
 #+END_SRC
 
-#+RESULTS:
-: <fun>
-
 Only when interacting with the top-level interpreter,
 commands must be terminated by ~;;~.
 OCaml uses ~;~ as an expression /separator/ ---not a terminator!
-
+#+latex: \newline
 My Emacs setup for OCaml can be found on this [[https://github.com/alhassy/OCamlCheatSheet][CheatSheet's repo]].
 * COMMENT more Administrivia
 
@@ -66,7 +48,7 @@ My Emacs setup for OCaml can be found on this [[https://github.com/alhassy/OCaml
   - ~function~ in-place of ~fun~ also works.
   - Infix functions can be used in prefix by enclosing them in parens; e.g., ~(+) 1 2.~
 
-* Emacs Setup
+* Emacs Setup :HTML:
 First, let's get [Meta]OCaml.
 #+BEGIN_SRC emacs-lisp
 ;; Easiest on my machine.
@@ -161,14 +143,15 @@ open Base;;
 #+END_SRC
 
 * Functions & Variables
-A function is declared with the ~let~ keyword
----variables are functions of zero arguments.
 
-\room
+#+latex: \hspace{-5ex}
+  A function is declared with the ~let~ keyword
+---variables are functions of zero arguments.
 Function & varaible names /must/ begin with a lowercase letter, and may use _ or ~'~.
 + They cannot begin with capital letters or numbers, or contain dashes!
 + Functions are like variables, but with arguments, so the same syntax applies.
 
+#+latex: \vspace{-0.5em}
 #
 #+begin_parallel org
 #+BEGIN_SRC ocaml
@@ -193,18 +176,19 @@ let x = string_of_int x
 Recursive functions are marked with the ~rec~ keyword.
 #+BEGIN_SRC ocaml
 let rec fact n = if n = 0
-		 then 1
-		 else n * fact (n - 1)
+         then 1
+         else n * fact (n - 1)
 #+END_SRC
 
 #+end_parallel
 
+#+latex: \vspace{-1em}
  Here's an example of a higher-order function & multiple local functions
  & an infix operator & an anonymous function & the main method is
  parametricly polymorphic.
 #+BEGIN_SRC ocaml
 let try_add (bop : 'a -> 'a -> 'a) (test : 'a -> bool)
-	    (default : 'a) (x : 'a) (y : 'a)
+        (default : 'a) (x : 'a) (y : 'a)
    = let (/@/) x y = bop x y
      (* Only select symbols can be used as infix operators *)
      (* (/@/) x y  =  x /@/ y *)
@@ -272,7 +256,7 @@ let input = read_line ();;
 #+BEGIN_SRC ocaml
 (* Constructors must start with a capital letter, like in Haskell *)
 type 'a fancy_num =   Nothing | Boring of int | Fancy of 'a
-		    | Point of point2d | Pair of 'a fancy_num * 'a fancy_num
+            | Point of point2d | Pair of 'a fancy_num * 'a fancy_num
 
 let example = Pair (Fancy "twenty", Point {x = 1.2; y = 3.14})
 #+END_SRC
@@ -403,8 +387,8 @@ Then,
 
 :End:
 
-* spacing newpage                                                    :ignore:
-  \newpage
+* spacing break :ignore:
+  \columnbreak
 
 * Options
 Option: Expressing whether a value is present or not.
@@ -478,7 +462,7 @@ are of unit type.
 let ex : unit = ();;
 
 let myupdate (arr : 'a array) (e : 'a)
-	     (i : int) : unit
+         (i : int) : unit
   = arr.(i) <- e;;
 
 myupdate nums 33 1;;
@@ -505,7 +489,7 @@ type running_sum = {mutable sum : int; mutable more : int};;
 let create () = {sum = 0; more = 0};;
 
 let update rs x =   rs.sum  <- rs.sum + rs.more
-		  ; rs.more <- x;;
+          ; rs.more <- x;;
 
 let  res = create ()
 in   update res 12
@@ -564,8 +548,8 @@ done;
 #+RESULTS:
 : (4950, true)
 
-* spacing newpage                                                    :ignore:
-  \newpage
+* spacing break :ignore:
+  \columnbreak
 
 * Modules
 
@@ -592,6 +576,7 @@ done;
 
 Modules names always begin with a capital; their contents are accessed with
 dot notation. Here is the general syntax:
+#+latex: \vspace{-1em}
 #+BEGIN_SRC ocaml :tangle no
 (* Module declaration *)
 module ‘Name’ : ‘signature’ = struct ‘implementation’ end
@@ -602,10 +587,11 @@ module type ‘Name’ = sig ‘sig_decls’ end
 (* sig_decls are a space-separated sequence of “type” or “val : ‘name’ : ‘type’”
 declarations. A “type” declaration with no “= ⋯” is an abstract type. *)
 #+END_SRC
-
+#+latex: \vspace{-1em}
 Without constructors ~type~ creates aliases, if we want to treat a type in two different
 ways and have the compiler ensure we don't mess-up, we produce single-constructor new
 types:
+#+latex: \vspace{-1em}
 #
 #+begin_parallel org
 #+BEGIN_SRC ocaml
@@ -627,6 +613,7 @@ let address_of_string : string -> address
 #+END_SRC
 #+end_parallel
 
+#+latex: \vspace{-1em}
 However, if the underlying type were the /same,/ this repetition could be error-prone.
 Instead, we could use /generative modules/: Distinct types with the same underlying implementation.
 Being ‘generative’ is akin to the ~new~ keyword in Java:
@@ -839,8 +826,8 @@ function arguments.
   #+RESULTS:
   : true
 
-* spacing newpage                                                    :ignore:
-  \newpage
+* spacing break :ignore:
+  \columnbreak
 
 * /Locally/ Abstract Types & ‘[un]bundling’
 
@@ -930,8 +917,8 @@ function arguments.
   + The deprecated ~!.~ is replaced with ~Runcode.run~.
   + A Haskell rendition can be found [[https://github.com/alhassy/multistage-programming-taha][here]].
 
-* spacing newpage                                                    :ignore:
-  \newpage
+* spacing break :ignore:
+  \columnbreak
 * Reads
 
 + [X] [[https://learnxinyminutes.com/docs/ocaml/][Learn /x/ in /y/ minutes, where /x = OCaml/ ]]
@@ -949,31 +936,61 @@ C-c C-c: Evaluate src block.
 (with-temp-buffer
     (insert
     "#+EXPORT_FILE_NAME: README.md
-     #+HTML: <h1> OCamlCheatSheet </h1>
-     #+OPTIONS: toc:nil d:nil
+     ,#+HTML: <h1> OCamlCheatSheet </h1>
+     ,#+OPTIONS: toc:nil d:nil
      # Toc is displayed below at a strategic position.
 
-     Quick reference for the OCaml language.
+     # Quick reference for the OCaml language.
 
-     *The listing sheet, as PDF, can be found
-     [here]({{{URL}}}/blob/master/CheatSheet.pdf)*,
+     ,#+begin_center
+     [[https://alhassy.github.io/OCamlCheatSheet/][◆ Website ◆]]
+     ,#+end_center
+
+     ,*The listing sheet, as PDF, can be found
+     [here](CheatSheet.pdf)*,
+     or as a [single column portrait](CheatSheet_Portrait.pdf),
      while below is an unruly html rendition.
 
-     This reference sheet is built around the system
-     https://github.com/alhassy/CheatSheet.
+     This reference sheet is built from a
+     [CheatSheets with Org-mode](https://github.com/alhassy/CheatSheet)
+     system.
 
-     #+TOC: headlines 2
-     #+INCLUDE: CheatSheet.org
+     ,#+TOC: headlines 2
+     ,#+INCLUDE: CheatSheet.org
     ")
     (org-mode)
+    (pop org-export-exclude-tags)
     (org-md-export-to-markdown)
 )
 #+END_SRC
 
+* COMMENT Making Portrait
+  Press ~C-c C-c~ on the following incantation to produce a single column portrait of the cheat sheet.
+#+name: make-portrait
+#+BEGIN_SRC emacs-lisp
+(with-temp-buffer
+    (insert
+    "#+EXPORT_FILE_NAME: CheatSheet_Portrait.pdf
+     ,#+LATEX_HEADER_EXTRA: \\landscapefalse \\def\\cheatsheetcols{1}
+     ,#+INCLUDE: CheatSheet.org
+    ")
+
+    (let ((org-export-use-babel nil))
+      (org-mode)
+      (org-latex-export-to-pdf)
+      )
+)
+#+END_SRC
+
+#+RESULTS: make-portrait
+: /Users/musa/OCamlCheatSheet/CheatSheet_Portrait.pdf
+
 * COMMENT footer
 
 # Local Variables:
+# eval: (add-to-list 'org-export-exclude-tags "HTML")
 # eval: (org-babel-tangle)
 # eval: (progn (org-babel-goto-named-src-block "make-readme") (org-babel-execute-src-block) (outline-hide-sublevels 1))
+# # eval: (local-set-key (kbd "<f12>") '(lambda () (interactive) (org-babel-goto-named-src-block "make-portrait") (org-babel-execute-src-block) (outline-hide-sublevels 1)))
 # compile-command: (org-latex-export-to-pdf)
 # End:
